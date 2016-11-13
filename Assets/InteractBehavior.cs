@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.VR;
 
 public class InteractBehavior : MonoBehaviour
 {
@@ -31,10 +32,14 @@ public class InteractBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Ray ray = new Ray(transform.position, transform.forward);
+        Quaternion HMDRotation = InputTracking.GetLocalRotation(VRNode.CenterEye);
+        Vector3 playerRotation = HMDRotation.eulerAngles;
+        Ray ray = new Ray(transform.position, playerRotation);
+        //Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetButton("Fire1") || OVRInput.GetDown(OVRInput.RawButton.A))
         {
+            print("Button Pressed!");
             /*GameObject.FindGameObjectWithTag("Button").GetComponent<PressButton>().Press();
             //*/
             if (Physics.Raycast(ray, out hit))
